@@ -1,5 +1,3 @@
-
-
 import article.Article;
 import basket.ProductBasket;
 import product.DiscountProduct;
