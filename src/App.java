@@ -4,9 +4,11 @@ import product.DiscountProduct;
 import product.FixPriceProduct;
 import product.Product;
 import product.SimpleProduct;
+import search.Searchable;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -31,7 +33,7 @@ public class App {
 
 
         System.out.println("Корзина 1");
-        ProductBasket basket = new ProductBasket(10);
+        ProductBasket<Product> basket = new ProductBasket<>();
         basket.addProduct(pivoCheep);
         basket.addProduct(pivo);
         basket.addProduct(pivo);
@@ -45,7 +47,7 @@ public class App {
 
 
         System.out.println("Корзина 2");
-        ProductBasket basket2 = new ProductBasket(5);
+        ProductBasket<Product> basket2 = new ProductBasket<>();
 
         basket2.addProduct(pivo);
         basket2.addProduct(vodka);
@@ -55,7 +57,7 @@ public class App {
         basket2.printAllProducts();
 
         System.out.println("Корзина 3");
-        ProductBasket basket3 = new ProductBasket(3);
+        ProductBasket<Product> basket3 = new ProductBasket<>();
         basket3.addProduct(coupon);
         basket3.addProduct(maltesers);
         basket3.addProduct(cheetos);
@@ -68,7 +70,7 @@ public class App {
         System.out.println(basket.isSpecialCount());
 
 
-        SearchEngine searchBase = new SearchEngine(20);
+        SearchEngine<Searchable> searchBase = new SearchEngine<>();
 
         searchBase.add(cucumber);
         searchBase.add(pivo);
@@ -83,8 +85,8 @@ public class App {
         searchBase.add(discount);
 
 
-        System.out.println(Arrays.toString(searchBase.search("Pivo")));
-        System.out.println(Arrays.toString(searchBase.search("Cheetos")));
+        System.out.println(searchBase.search("Pivo"));
+        System.out.println(searchBase.search("Vodka"));
 
 
         System.out.println("ответ на задание 4");

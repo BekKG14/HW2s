@@ -1,28 +1,25 @@
 package basket;
 import product.Product;
 
-public class ProductBasket {
-    private Product[] products;
-    private int size;
+import java.util.LinkedList;
+import java.util.List;
 
-    public ProductBasket(int capacity) {
-        products = new Product[capacity];
-        size = 0;
+public class ProductBasket<P extends Product> {
+    private final LinkedList<P> products;
+
+    public ProductBasket() {
+        this.products = new LinkedList<>();
     }
-    int i = 2;
 
-    public void addProduct(Product product) {
-        if (size < products.length) {
-            products[size++] = product;
-        } else {
-            System.out.println("КОРЗИНА ПЕРЕПОЛНЕНА");
-        }
+
+    public void addProduct(P product) {
+        products.add(product);
     }
 
     public int isSpecialCount() {
         int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (products[i].isSpecial() == true) {
+        for (P product : products) {
+            if (product.isSpecial()) {
                 count = count + 1;
             }
         }
@@ -31,27 +28,27 @@ public class ProductBasket {
 
     public double totalCost() {
         double amount = 0;
-        for (int i = 0; i < size; i++) {
-            if (products[i] != null) {
-                amount = amount + products[i].getCost();
-            }
+        int place = 0;
+        for (P product : products) {
+                amount = amount + product.getCost();
+                place++;
         }
         return amount;
     }
 
     public void printAllProducts() {
-        if (size == 0) {
+        if (products.isEmpty()) {
             System.out.println("Корзина пуста");
         } else {
-            for (int i = 0; i < size; i++) {
-                System.out.println(products[i]);
+            for (P product : products) {
+                System.out.println(product.toString());
             }
         }
     }
 
-    public boolean checkProduct(Product product) {
-        for (int i = 0; i < size; i++) {
-            if (products[i] != null && products[i].equals(product)) {
+    public boolean checkProduct(Product p) {
+        for (P product : products) {
+            if (product != null && product.equals(p)) {
                 return true;
             }
         }
@@ -59,18 +56,26 @@ public class ProductBasket {
     }
 
     public void clearBasket() {
-        for (int i = 0; i < size; i++) {
-            products[i] = null;
+            products.clear();
         }
-    }
-
     public Product getProduct(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= products.size()) {
             throw new IndexOutOfBoundsException("Неверный индекс " + index);
         }
-        System.out.println(products[index]);
-        return products[index];
+        return products.get(index);
+    }
 
-
+    public List<P> removeByName(String name) {
+        List<P> removedList = new LinkedList<>();
+        String prod = "";
+        for (int i = 0; i < products.size(); i++) {
+            prod = products.get(i).getName();
+            if ( prod.equalsIgnoreCase(name)){
+                removedList.add(products.get(i));
+                products.remove(i);
+                i--;
+            }
+        }
+        return removedList;
     }
 }
