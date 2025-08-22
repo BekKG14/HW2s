@@ -5,7 +5,7 @@ import java.security.Key;
 import java.util.*;
 
 public class ProductBasket<P extends Product> {
-    private final HashMap<String, List <P>> products;
+    private final Map<String, List <P>> products;
 
     public ProductBasket() {
         this.products = new HashMap<>();
@@ -75,7 +75,7 @@ public class ProductBasket<P extends Product> {
     public List<P> removeByName(String name) {
         List<P> removedList = products.remove(name);
         if (removedList == null){
-            return new LinkedList<>();
+            return List.of();
         }
 
         return removedList;
