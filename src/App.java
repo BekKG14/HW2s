@@ -40,10 +40,8 @@ public class App {
         basket.addProduct(vodka);
         basket.addProduct(chlor);
 
-
         basket.printAllProducts();
         basket.checkProduct(pivo);
-        System.out.println("Проверка " + basket.getProduct(3));
 
 
         System.out.println("Корзина 2");

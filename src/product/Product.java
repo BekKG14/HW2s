@@ -2,6 +2,9 @@ package product;
 
 import search.Searchable;
 
+import java.util.Comparator;
+import java.util.Objects;
+
 
 public abstract class Product implements Searchable {
     protected final String name;
@@ -36,4 +39,18 @@ public abstract class Product implements Searchable {
         return "PRODUCT";
     }
 
+    @Override
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Product product = (Product) o;
+        return Objects.equals(name, product.name);
+    }
+
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
 }
