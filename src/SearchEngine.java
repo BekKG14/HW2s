@@ -2,6 +2,7 @@ import product.Product;
 import search.Searchable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SearchEngine<P extends Searchable> {
     private Set<Searchable> searchables;
@@ -15,13 +16,15 @@ public class SearchEngine<P extends Searchable> {
         }
 
     public Set<Searchable> search(String searchTerm) {
-        Set<Searchable> result = new TreeSet<>(new SortByNameComparator());
-        for (Searchable searchable : searchables) {
-            if (searchable.getSearchTerm().contains(searchTerm)) {
-                result.add(searchable);
-            }
-        }
-        return result;
+        return searchables.stream()
+                .filter(p -> p.getSearchTerm().contains(searchTerm))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new SortByNameComparator())));
+//        for (Searchable searchable : searchables) {
+//            if (searchable.getSearchTerm().contains(searchTerm)) {
+//                result.add(searchable);
+//            }
+//        }
+//        return result;
     }
 
     public Searchable searchBestResult(String substring) throws BestResultNotFound {

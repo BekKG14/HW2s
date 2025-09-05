@@ -1,7 +1,6 @@
 package basket;
 import product.Product;
 
-import java.security.Key;
 import java.util.*;
 
 public class ProductBasket<P extends Product> {
@@ -15,54 +14,68 @@ public class ProductBasket<P extends Product> {
         products.computeIfAbsent(p.getName(), k -> new ArrayList<>()).add(p);
     }
 
-    public int isSpecialCount() {
-        int count = 0;
-        for(Map.Entry<String, List<P>> entry : products.entrySet()){
-        for (P product : entry.getValue()) {
-            if (product.isSpecial()) {
-                count = count + 1;
-            }
-        }
-        }
-        return count;
+    public long isSpecialCount() {
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .filter(p -> p.isSpecial())
+                .count();
+
+//        int count = 0;
+//        for(Map.Entry<String, List<P>> entry : products.entrySet()){
+//        for (P product : entry.getValue()) {
+//            if (product.isSpecial()) {
+//                count = count + 1;
+//            }
+//        }
+//        }
+//        return count;
     }
 
+
+
     public double totalCost() {
-        double amount = 0;
-        for (Map.Entry<String, List<P>> entry : products.entrySet()) {
-            for (P product : entry.getValue()) {
-                amount = amount + product.getCost();
-            }
-        }
-        return amount;
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .mapToDouble(Product::getCost)
+                .sum();
+
+//        for (Map.Entry<String, List<P>> entry : products.entrySet()) {
+//            for (P product : entry.getValue()) {
+//                amount = amount + product.getCost();
+//            }
+//        }
+//        return amount;
     }
 
     public void printAllProducts() {
         if (products.isEmpty()) {
             System.out.println("Корзина пуста");
         } else {
-            for (Map.Entry<String, List<P>> entry : products.entrySet()){
-                    for (P product : entry.getValue()) {
-                        System.out.println(product.toString());
-                    }
-        }
+            products.values().stream()
+                    .flatMap(Collection::stream)
+                    .forEach(p -> System.out.println(p.toString()));
+//            for (Map.Entry<String, List<P>> entry : products.entrySet()){
+//                    for (P product : entry.getValue()) {
+//                        System.out.println(product.toString());
+//                    }
         }
     }
 
-    public boolean checkProduct(Product p) {
-        for (Map.Entry<String, List<P>> entry : products.entrySet()) {
+
+public boolean checkProduct(Product p) {
+    for (Map.Entry<String, List<P>> entry : products.entrySet()) {
         for (P product : entry.getValue()) {
             if (product != null && product.equals(p)) {
                 return true;
             }
         }
-        }
-        return false;
     }
+    return false;
+}
 
-    public void clearBasket() {
-            products.clear();
-        }
+public void clearBasket() {
+    products.clear();
+}
 
 
 //    public Product getProduct(int index) {
@@ -72,12 +85,12 @@ public class ProductBasket<P extends Product> {
 //        return products.get(index);
 //    }
 
-    public List<P> removeByName(String name) {
-        List<P> removedList = products.remove(name);
-        if (removedList == null){
-            return List.of();
-        }
-
-        return removedList;
+public List<P> removeByName(String name) {
+    List<P> removedList = products.remove(name);
+    if (removedList == null){
+        return List.of();
     }
+
+    return removedList;
+}
 }
