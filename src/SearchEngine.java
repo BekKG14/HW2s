@@ -1,23 +1,22 @@
 import product.Product;
 import search.Searchable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SearchEngine<P extends Searchable> {
-    private ArrayList<P> searchables;
+    private Set<Searchable> searchables;
 
     public SearchEngine() {
-        this.searchables = new ArrayList<>();
+        this.searchables = new HashSet<>();
     }
 
-    public void add(P item) {
+    public void add(Searchable item) {
         searchables.add(item);
         }
 
-    public ArrayList<P> search(String searchTerm) {
-        ArrayList<P> result = new ArrayList<>();
-        for (P searchable : searchables) {
+    public Set<Searchable> search(String searchTerm) {
+        Set<Searchable> result = new TreeSet<>(new SortByNameComparator());
+        for (Searchable searchable : searchables) {
             if (searchable.getSearchTerm().contains(searchTerm)) {
                 result.add(searchable);
             }
@@ -26,19 +25,20 @@ public class SearchEngine<P extends Searchable> {
     }
 
     public Searchable searchBestResult(String substring) throws BestResultNotFound {
-
-        int currentObject = 0;
-        ArrayList<P> arr = search(substring);
+        Set<Searchable> values = search(substring);
         int bestResult = -1;
-
-        for (int i = 0; i < arr.size(); i++) {
+        Searchable lol = null;
+        if (values.isEmpty()){
+            throw new BestResultNotFound("Нет подходящих по запросу ");
+        }
+        for (Searchable result : values) {
             int match = 0;
             int startIndex = 0;
-            if (arr.get(i) == null) {
+            if (result == null) {
                 continue;
             }
             while (true) {
-                int foundAt = arr.get(i).getSearchTerm().indexOf(substring, startIndex);
+                int foundAt = result.getSearchTerm().indexOf(substring, startIndex);
                 if (foundAt != -1) {
                     match++;
                     startIndex = foundAt + substring.length();
@@ -47,12 +47,8 @@ public class SearchEngine<P extends Searchable> {
                 }
             }if (match > bestResult) {
                 bestResult = match;
-                currentObject = i;
+                lol = result;
             }
-        }if (arr.get(currentObject) != null) {
-            return arr.get(currentObject);
-        }else {
-            throw new BestResultNotFound("Нет подходящих по запросу ");
-        }
+        }return lol;
     }
 }
