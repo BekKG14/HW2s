@@ -15,7 +15,7 @@ public class SearchEngine<P extends Searchable> {
         }
 
     public Set<Searchable> search(String searchTerm) {
-        Set<Searchable> result = new TreeSet<>(new SortByName());
+        Set<Searchable> result = new TreeSet<>(new SortByNameComparator());
         for (Searchable searchable : searchables) {
             if (searchable.getSearchTerm().contains(searchTerm)) {
                 result.add(searchable);

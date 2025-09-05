@@ -2,7 +2,7 @@ import search.Searchable;
 
 import java.util.Comparator;
 
-public class SortByName implements Comparator<Searchable> {
+public class SortByNameComparator implements Comparator<Searchable> {
 
     @Override
     public int compare(Searchable s1, Searchable s2) {
